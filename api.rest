@@ -1,0 +1,8 @@
+#Create User
+DELETE http://localhost:3000/user
+Content-Type: application/json
+
+{
+    "username": "demo4",
+    "password": "demo4"
+}
