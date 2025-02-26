@@ -1,8 +1,20 @@
-#Create User
-DELETE http://localhost:3000/user
+### Create User
+POST  http://localhost:3000/user
 Content-Type: application/json
 
 {
-    "username": "demo4",
-    "password": "demo4"
+        "username": "demo4",
+        "password": "demo4"
 }
+    
+### Update User
+PUT http://localhost:3000/user/5
+Content-Type: application/json
+
+{
+    "username": "demo5",
+    "password": "newpassword"
+}
+
+### Delete User
+DELETE http://localhost:3000/user/4
