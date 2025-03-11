@@ -3,21 +3,21 @@ POST  http://localhost:3000/user
 Content-Type: application/json
 
 {
-        "username": "demo8",
-        "password": "demo8"
+        "username": "demo12",
+        "password": "demo12"
 }
     
 ### Update User
-PUT http://localhost:3000/user/5
+PUT http://localhost:3000/user/9
 Content-Type: application/json
 
 {
-    "username": "demo5",
+    "username": "demo12edit",
     "password": "newpassword"
 }
 
 ### Delete User
-DELETE http://localhost:3000/user/4
+DELETE http://localhost:3000/user/6
 
 ### Search User
 GET http://localhost:3000/user/search?q=d

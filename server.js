@@ -1,9 +1,9 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
-const CryptoJS = require('crypto-js');
+const CryptoJS = require("crypto-js");
 
-const secretKey = 'dogcatcow';
+const secretKey = "dogcatcow";
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,8 +16,11 @@ app.get("/", (req, res) => {
 app.get("/user", async (req, res) => {
   const data = await prisma.user.findMany();
   const finalData = await data.map((record) => {
-    const decode = record.password = CryptoJS.AES.decrypt(record.password.toString(), secretKey)
-    record.password = decode.toString(CryptoJS.enc.Utf8)
+    // const decode = (record.password = CryptoJS.AES.decrypt(
+    //   record.password.toString(),
+    //   secretKey
+    // ));
+    // record.password = decode.toString(CryptoJS.enc.Utf8);
     return record;
   });
   res.json({
@@ -37,16 +40,17 @@ app.get("/user", async (req, res) => {
 app.post("/user", async (req, res) => {
   console.log(req.body);
   // const response = await prisma.user.create(req.body);
-  const encode = CryptoJS.AES.encrypt(req.body.password, secretKey)
+  const encode = CryptoJS.AES.encrypt(req.body.password, secretKey);
   const response = await prisma.user.create({
     data: {
       username: req.body.username,
-      password: encode.toString()
+      password: encode.toString(),
     },
   });
   if (response) {
     res.json({
       message: "add data successfully",
+      data: encode,
     });
   } else {
     res.json({
@@ -57,11 +61,12 @@ app.post("/user", async (req, res) => {
 
 app.put("/user/:id", async (req, res) => {
   const { id } = req.params;
+  const encode = CryptoJS.AES.encrypt(req.body.password, secretKey);
   const response = await prisma.user.update({
     where: { id: Number(id) },
     data: {
       username: req.body.username,
-      password: req.body.password,
+      password: encode.toString(),
     },
   });
   if (response) {
@@ -72,15 +77,14 @@ app.put("/user/:id", async (req, res) => {
 });
 
 app.get("/user/search", async (req, res) => {
-    console.log(req.query.q);
-    // const data = await prisma.$queryRaw`select id,username from user where username like '${req.query.q}%' `
-    res.json({
-      message: 'OK',
-      // data
-      sql: " select id,username from user where username like '${req.query.q}%' "
-    })
+  console.log(req.query.q);
+  // const data = await prisma.$queryRaw`select id,username from user where username like '${req.query.q}%' `
+  res.json({
+    message: "OK",
+    // data
+    sql: " select id,username from user where username like '${req.query.q}%' ",
+  });
 });
-
 
 app.delete("/user/:id", async (req, res) => {
   try {
